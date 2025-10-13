@@ -1,0 +1,44 @@
+version: '3.9'
+
+services:
+  db:
+    image: mysql:8.0   # puedes usar mysql:8.4 si prefieres la versión LTS
+    container_name: mysql-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: db_usuarios
+      MYSQL_USER: usuario1
+      MYSQL_PASSWORD: ps1234
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./mysql_data:/var/lib/mysql
+
+  adminer:
+    image: adminer
+    container_name: adminer-1
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: backend-node
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_USER=usuario1
+      - DB_PASS=ps1234
+      - DB_NAME=db_usuarios
+    depends_on:
+      - db
+    volumes:
+      - ./backend:/usr/src/app
