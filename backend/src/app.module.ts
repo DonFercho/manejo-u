@@ -15,7 +15,7 @@ import { OrganizacionModule } from './organizacion/organizacion.module';
       username: 'usuario1',
       password: 'ps1234', // o la que tengas en tu docker-compose
       database: 'db_usuarios',
-      entities: [Usuario], // puedes poner todas tus entidades o usar un patrón
+      entities: [Usuario, Organizacion, Direccion], // puedes poner todas tus entidades o usar un patrón
       synchronize: true, // 👈 crea automáticamente las tablas (solo en desarrollo)
       autoLoadEntities: true,
     }),
