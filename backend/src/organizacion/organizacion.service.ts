@@ -1,26 +1,57 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Organizacion } from './entities/organizacion.entity';
 import { CreateOrganizacionDto } from './dto/create-organizacion.dto';
 import { UpdateOrganizacionDto } from './dto/update-organizacion.dto';
 
 @Injectable()
 export class OrganizacionService {
-  create(createOrganizacionDto: CreateOrganizacionDto) {
-    return 'This action adds a new organizacion';
+  constructor(
+    @InjectRepository(Organizacion)
+    private organizacionRepository: Repository<Organizacion>,
+  ) {}
+
+  async findAll() {
+    return this.organizacionRepository.find();
   }
 
-  findAll() {
-    return `This action returns all organizacion`;
+  async findOne(id: number) {
+    return this.organizacionRepository.findOne({ where: { id_organizacion: id } });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} organizacion`;
+  async create(createDto: CreateOrganizacionDto) {
+    // Crear organización usando el campo 'direccion' como string
+    const organizacion = this.organizacionRepository.create({
+      nombre: createDto.nombre,
+      telefono: createDto.telefono,
+      direccion: createDto.direccion,
+    });
+
+    return this.organizacionRepository.save(organizacion);
   }
 
-  update(id: number, updateOrganizacionDto: UpdateOrganizacionDto) {
-    return `This action updates a #${id} organizacion`;
+  async update(id: number, updateDto: UpdateOrganizacionDto) {
+    const organizacion = await this.findOne(id);
+    
+    if (!organizacion) {
+      throw new Error('Organización no encontrada');
+    }
+  // Actualizar organización (se actualizan los campos presentes en el DTO)
+  await this.organizacionRepository.update(id, updateDto as any);
+
+    return this.findOne(id);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} organizacion`;
+  async remove(id: number) {
+    const organizacion = await this.findOne(id);
+    
+    if (!organizacion) {
+      throw new Error('Organización no encontrada');
+    }
+
+    // Eliminar organización
+    await this.organizacionRepository.delete(id);
+    return { deleted: true };
   }
 }
