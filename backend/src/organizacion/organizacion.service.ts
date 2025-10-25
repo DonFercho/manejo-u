@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Organizacion } from './entities/organizacion.entity';
+import { organizacion } from './entities/organizacion.entity';
 import { CreateOrganizacionDto } from './dto/create-organizacion.dto';
 import { UpdateOrganizacionDto } from './dto/update-organizacion.dto';
 
 @Injectable()
 export class OrganizacionService {
   constructor(
-    @InjectRepository(Organizacion)
-    private organizacionRepository: Repository<Organizacion>,
+    @InjectRepository(organizacion)
+    private organizacionRepository: Repository<organizacion>,
   ) {}
 
   async findAll() {
