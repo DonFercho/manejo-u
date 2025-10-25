@@ -10,10 +10,10 @@ export class Usuario {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 50 })
-  id_organizacion: number;
+  @Column()
+id_organizacion: number;
 
-  @Column({length: 10})
+  @Column()
   documento: number;
 
   @Column({ length: 100 })
@@ -28,7 +28,7 @@ export class Usuario {
    @Column({ length: 100 })
   apellido2: string;
 
-   @Column({ length: 15 })
+   @Column()
   telefono: number;
 
    @Column({type: 'enum',enum: Rol,default: Rol.USER,})
@@ -47,7 +47,7 @@ export class Usuario {
   activo: boolean;
 
     // Relación con organizacion
-  @ManyToOne(() => organizacion, { eager: true })
+  @ManyToOne(() => organizacion, (organizacion) => organizacion.usuarios, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'id_organizacion' })
   organizacion: organizacion;
 }

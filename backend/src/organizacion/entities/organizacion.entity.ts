@@ -15,7 +15,7 @@ export class organizacion {
   @Column()
   telefono: number;
 
-  // Relación inversa con usuarios
-  @OneToMany(() => Usuario, (usuario) => usuario.id_organizacion)
+  // Relación correcta con usuarios
+  @OneToMany(() => Usuario, (usuario) => usuario.organizacion)
   usuarios: Usuario[];
 }
