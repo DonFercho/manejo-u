@@ -49,6 +49,6 @@ export class Usuario {
     // Relación con organizacion
   @ManyToOne(() => organizacion, { eager: true })
   @JoinColumn({ name: 'id_organizacion' })
-  direccion: organizacion;
+  organizacion: organizacion;
 }
 
