@@ -1,22 +1,21 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'typeorm';
-import { Direccion } from './direccion.entity';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Usuario } from 'src/usuarios/entities/usuario.entity';
 
 @Entity('organizacion')
-export class Organizacion {
+export class organizacion {
   @PrimaryGeneratedColumn()
   id_organizacion: number;
 
-  @Column()
-  id_direccion: number;
+  @Column({ length: 255 })
+  direccion: string;
 
   @Column({ length: 255 })
   nombre: string;
 
-  @Column({ type: 'integer' })
+  @Column()
   telefono: number;
 
-  // Relación con Direccion
-  @OneToOne(() => Direccion, { eager: true })
-  @JoinColumn({ name: 'id_direccion' })
-  direccion: Direccion;
+  // Relación inversa con usuarios
+  @OneToMany(() => Usuario, (usuario) => usuario.id_organizacion)
+  usuarios: Usuario[];
 }

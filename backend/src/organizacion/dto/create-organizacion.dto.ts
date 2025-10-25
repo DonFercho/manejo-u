@@ -1,27 +1,4 @@
-import { IsString, IsNotEmpty, IsNumber, IsObject, ValidateNested } from 'class-validator';
-import { Type } from 'class-transformer';
-
-export class DireccionDto {
-  @IsString()
-  @IsNotEmpty()
-  departamento: string;
-
-  @IsString()
-  @IsNotEmpty()
-  ciudad: string;
-
-  @IsString()
-  @IsNotEmpty()
-  comuna: string;
-
-  @IsString()
-  @IsNotEmpty()
-  barrio: string;
-
-  @IsString()
-  @IsNotEmpty()
-  nomenclatura: string;
-}
+import { IsString, IsNotEmpty, IsNumber } from 'class-validator';
 
 export class CreateOrganizacionDto {
   @IsString()
@@ -32,8 +9,8 @@ export class CreateOrganizacionDto {
   @IsNotEmpty()
   telefono: number;
 
-  @IsObject()
-  @ValidateNested()
-  @Type(() => DireccionDto)
-  direccion: DireccionDto;
+  // Mantener campo 'direccion' como string  
+  @IsString()
+  @IsNotEmpty()
+  direccion: string;
 }

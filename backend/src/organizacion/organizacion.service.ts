@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Organizacion } from './entities/organizacion.entity';
-import { Direccion } from './entities/direccion.entity';
 import { CreateOrganizacionDto } from './dto/create-organizacion.dto';
 import { UpdateOrganizacionDto } from './dto/update-organizacion.dto';
 
@@ -11,33 +10,22 @@ export class OrganizacionService {
   constructor(
     @InjectRepository(Organizacion)
     private organizacionRepository: Repository<Organizacion>,
-    @InjectRepository(Direccion)
-    private direccionRepository: Repository<Direccion>,
   ) {}
 
   async findAll() {
-    return this.organizacionRepository.find({
-      relations: ['direccion'],
-    });
+    return this.organizacionRepository.find();
   }
 
   async findOne(id: number) {
-    return this.organizacionRepository.findOne({
-      where: { id_organizacion: id },
-      relations: ['direccion'],
-    });
+    return this.organizacionRepository.findOne({ where: { id_organizacion: id } });
   }
 
   async create(createDto: CreateOrganizacionDto) {
-    // Primero crear la dirección
-    const direccion = this.direccionRepository.create(createDto.direccion);
-    const savedDireccion = await this.direccionRepository.save(direccion);
-
-    // Luego crear la organización con el id de la dirección
+    // Crear organización usando el campo 'direccion' como string
     const organizacion = this.organizacionRepository.create({
       nombre: createDto.nombre,
       telefono: createDto.telefono,
-      id_direccion: savedDireccion.id_direccion,
+      direccion: createDto.direccion,
     });
 
     return this.organizacionRepository.save(organizacion);
@@ -49,20 +37,8 @@ export class OrganizacionService {
     if (!organizacion) {
       throw new Error('Organización no encontrada');
     }
-
-    // Si se actualizan datos de dirección
-    if (updateDto.direccion) {
-      await this.direccionRepository.update(
-        organizacion.id_direccion,
-        updateDto.direccion,
-      );
-    }
-
-    // Actualizar datos de organización
-    const { direccion, ...orgData } = updateDto;
-    if (Object.keys(orgData).length > 0) {
-      await this.organizacionRepository.update(id, orgData);
-    }
+  // Actualizar organización (se actualizan los campos presentes en el DTO)
+  await this.organizacionRepository.update(id, updateDto as any);
 
     return this.findOne(id);
   }
@@ -76,10 +52,6 @@ export class OrganizacionService {
 
     // Eliminar organización
     await this.organizacionRepository.delete(id);
-    
-    // Eliminar dirección asociada
-    await this.direccionRepository.delete(organizacion.id_direccion);
-
     return { deleted: true };
   }
 }
