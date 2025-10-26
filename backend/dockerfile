@@ -4,17 +4,20 @@ FROM node:20
 # Crea el directorio de trabajo
 WORKDIR /usr/src/app
 
-# Copia los archivos de configuración primero (para aprovechar la caché)
+# Copia primero los archivos de dependencias (mejor uso de caché)
 COPY package*.json ./
 
-# Instala dependencias
-RUN npm install
+# Instala dependencias de producción
+RUN npm install 
 
-# Copia el resto del código
+# Copia el resto del código fuente
 COPY . .
 
-# Expone el puerto 3000
+# Compila el código TypeScript a JavaScript
+RUN npm run build
+
+# Expone el puerto del backend
 EXPOSE 3000
 
-# Comando para iniciar el servidor
-CMD ["npm", "run", "start"]
+# Comando para iniciar en modo producción
+CMD ["npm", "run", "start:prod"]
