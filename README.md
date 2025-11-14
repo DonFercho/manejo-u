@@ -21,42 +21,179 @@
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-## Description
+# Manejo-U: Microservicio para Gestión Académica
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Este repositorio contiene el backend de un microservicio desarrollado con **NestJS** para la gestión de organizaciones y usuarios en entornos académicos. El sistema está diseñado para ser escalable, seguro y fácilmente integrable con otros módulos institucionales.
 
-## Project setup
+
+
+
+##  Funcionalidad principal
+
+El microservicio permite:
+
+-  Registrar, actualizar y eliminar organizaciones académicas
+-  Gestionar usuarios con atributos como nombre, correo, contraseña y estado
+-  Consultar entidades por ID o listado completo
+-  Ejecutar pruebas unitarias y de integración
+-  Desplegar el entorno completo con Docker (base de datos, backend, Adminer)
+
+
+
+
+
+##  Estructura del repositorio
+backend/ 
+├── src/ 
+│ ├── organization/ 
+│ │ ├── dto/ 
+│ │ ├── entities/ 
+│ │ ├── organization.controller.ts 
+│ │ ├── organization.service.ts 
+│ │ └── organization.module.ts 
+│ ├── usuarios/ 
+│ │ ├── usuario.entity.ts 
+│ │ ├── usuarios.controller.ts 
+│ │ ├── usuarios.service.ts 
+│ │ └── usuarios.module.ts 
+│ ├── app.controller.ts 
+│ ├── app.service.ts 
+│ └── main.ts 
+├── test/ 
+├── Dockerfile 
+├── docker-compose.yaml 
+├── package.json 
+├── tsconfig.json 
+└── .gitignore
+
+
+
+
+
+##  Instalación y ejecución
+
+### Requisitos
+
+- Node.js ≥ 18
+- Docker y Docker Compose
+- MySQL (si no se usa Docker)
+
+### Instalación local
 
 ```bash
-$ npm install
-```
+npm install
 
-## Compile and run the project
+npm run start:dev
 
-```bash
-# development
-$ npm run start
+# Ejecucion con Docker
+npm run docker_start
 
-# watch mode
-$ npm run start:dev
 
-# production mode
-$ npm run start:prod
-```
 
-## Run tests
+# Esto levanta:
+mysql-db en el puerto 3307
+adminer en el puerto 8080
+backend-node en el puerto 3000
 
-```bash
-# unit tests
-$ npm run test
 
-# e2e tests
-$ npm run test:e2e
 
-# test coverage
-$ npm run test:cov
-```
+##  Tecnologías utilizadas
 
+# NestJS: Framework backend modular
+# TypeORM: ORM para MySQL
+# MySQL 8: Base de datos relacional
+# Docker & Docker Compose: Contenerización
+# Jest: Framework de pruebas
+# ESLint + Prettier: Linter y formateador
+
+
+
+# Endpoints principales
+
+##  Organización
+# Método  |	 Ruta    	     |   Descripción
+# POST		  /organization		  Crear organización
+# GET		    /organization		  Listar todas las organizaciones
+# GET		    /organization:id	Obtener organización por ID
+# PATCH		  /organization:id	Actualizar organización
+# DELETE	  /organization:id	Eliminar organización
+
+
+# Usuarios
+# Método  |	 Ruta    	     |   Descripción
+# POST		  /usuarios		      Crear organización
+# GET		    /usuarios		      Listar todas las organizaciones
+# GET		    /usuarios:id		  Obtener organización por ID
+# PATCH		  /usuarios:id		  Actualizar organización
+# DELETE	  /usuarios:id		  Eliminar organización
+
+
+
+# Pruebas
+npm run test         # Ejecuta pruebas unitarias
+npm run test:cov     # Genera reporte de cobertura
+npm run test:e2e     # Pruebas end-to-end
+
+
+
+# Docker Compose
+
+services:
+  db: mysql:8.0
+  adminer: adminer
+  backend: NestJS app
+
+# Base de datos: db_usuarios
+# Usuario: usuario1
+# Contraseña: ps1234
+
+
+
+# Variables de entorno del backend:
+DB_HOST=db
+DB_PORT=3306
+DB_USER=usuario1
+DB_PASS=ps1234
+DB_NAME=db_usuarios
+
+
+
+# Scripts disponibles
+
+# start		      |	Inicia la aplicación NestJS
+# start:dev	    |	Inicia en modo desarrollo con recarga automática
+# start:debug	  |	Inicia con depuración activa
+# start:prod	  |	Ejecuta el proyecto compilado desde dist/main.js
+# build		      |	Compila el proyecto NestJS
+# format	      |	Aplica Prettier para formatear el código
+# lint		      |	Ejecuta ESLint con corrección automática
+# test		      |	Ejecuta pruebas unitarias con Jest
+# test:watch	  |	Ejecuta pruebas en modo observación
+# test:cov	    |	Genera reporte de cobertura de pruebas
+# test:debug	  |	Ejecuta pruebas en modo depuración
+# test:e2e	    |	Ejecuta pruebas end-to-end con configuración personalizada
+# docker_start	|	Levanta el entorno con Docker usando docker-compose
+
+
+
+# Dependencias clave
+
+Paquete		      |	Versión		        |	Propósito
+@nestjs/core		  ^11.0.1			        Framework principal
+@nestjs/typeorm		^11.0.0			        Integración con TypeORM
+typeorm			      ^0.3.27			        ORM para MySQL
+mysql2			      ^3.15.2			        Driver de conexión MySQL
+jest, ts-jest		  ^30.0.0			        Pruebas unitarias
+eslint, prettier	^9.18.0 / ^3.4.2	  Calidad y estilo de código
+
+
+
+# Archivos ignorados (.gitignore)
+
+# node_modules/, dist/, build/
+# .env, .vscode/, .idea/
+# logs/, coverage/, *.log
+# Archivos temporales y de diagnóstico
 ## Deployment
 
 When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
